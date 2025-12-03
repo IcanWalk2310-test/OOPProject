@@ -1,42 +1,56 @@
 package game.core;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Skill implements Serializable {
 
-    private String name;
-    private Profession allowedProfession;
-    private int baseDamage;
-    private int cooldown;
-    private int currentCooldown;
+    private final String id; // unique immutable ID
+    private final String name;
+    private final Profession allowedProfession;
+    private final int baseDamage;
+    private final int baseCooldown;
 
-    public Skill(String name, Profession allowedProfession, int baseDamage, int cooldown) {
+    public Skill(String name, Profession allowedProfession, int baseDamage, int baseCooldown) {
+        this.id = UUID.randomUUID().toString(); // generate unique ID
         this.name = name;
         this.allowedProfession = allowedProfession;
         this.baseDamage = baseDamage;
-        this.cooldown = cooldown;
-        this.currentCooldown = 0;
+        this.baseCooldown = baseCooldown;
     }
+
+    // ======== USAGE LOGIC =========
 
     public boolean canUse(Player player) {
-        return player.getProfession() == allowedProfession && currentCooldown == 0;
+        if (player == null) return false;
+
+        if (allowedProfession != null && player.getProfession() != allowedProfession)
+            return false;
+
+        return player.getSkillCooldown(this) == 0;
     }
 
-    public void use(Player player, Enemy enemy) {
-        if (canUse(player)) {
-            int damage = baseDamage + player.getStats().getStrength();
-            enemy.takeDamage(damage);
-            currentCooldown = Math.max(0, cooldown - player.getStats().getCooldownReduction());
+    public int use(Player player, Enemy enemy) {
+        if (!canUse(player)) return 0;
+
+        int damage = baseDamage + player.getStats().getStrength();
+        enemy.takeDamage(damage);
+
+        if (baseCooldown > 0) {
+            int cdr = player.getStats().getCooldownReduction();
+            int finalCooldown = Math.max(1, baseCooldown - cdr);
+            player.setSkillCooldown(this, finalCooldown);
+        } else {
+            player.setSkillCooldown(this, 0);
         }
+
+        return damage;
     }
 
-    public void tickCooldown() {
-        if (currentCooldown > 0) {
-            currentCooldown--;
-        }
-    }
+    // ======== GETTERS ========
 
-    public String getName() {
-        return name;
-    }
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public int getBaseDamage() { return baseDamage; }
+    public int getBaseCooldown() { return baseCooldown; }
 }
