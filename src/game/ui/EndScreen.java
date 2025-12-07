@@ -1,5 +1,6 @@
 package game.ui;
 
+import game.core.Player;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -11,32 +12,46 @@ public class EndScreen extends StackPane {
     private final int width;
     private final int height;
     private final boolean playerWon;
+    private final Player player;
 
-    public EndScreen(int width, int height, boolean playerWon) {
+    public EndScreen(int width, int height, boolean playerWon, Player player) {
         this.width = width;
         this.height = height;
         this.playerWon = playerWon;
+        this.player = player;
         build();
     }
 
     private void build() {
         setPrefSize(width, height);
 
-        // Temporary placeholder background
+        // Background
         StackPane bg = new StackPane();
-        bg.setStyle("-fx-background-color: gray;");
+        bg.setStyle("-fx-background-color: black;");
 
-        VBox v = new VBox(12);
+        VBox v = new VBox(20);
         v.setAlignment(Pos.CENTER);
 
-        Text txt = new Text(playerWon ? "You Win!" : "You Lose");
-        txt.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: white;");
+        // Victory/Defeat text
+        Text result = new Text(playerWon ? "🎉 VICTORY!" : "💀 DEFEAT");
+        result.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: yellow;");
 
-        Button menu = new Button("Back to Menu");
-        menu.setOnAction(e -> SceneManager.showStartMenu());
+        // Player stats summary
+        Text stats = new Text(
+                "Your Stats:\n" +
+                "  STR: " + player.getStat().getSTR() +
+                " | AGI: " + player.getStat().getAGI() +
+                " | INT: " + player.getStat().getINT() +
+                "\n  HP: " + player.getStat().getHP() +
+                "/" + player.getMaxHP()
+        );
+        stats.setStyle("-fx-font-size: 18px; -fx-fill: white;");
 
-        v.getChildren().addAll(txt, menu);
+        // Back to menu
+        Button menuBtn = new Button("Back to Menu");
+        menuBtn.setOnAction(e -> SceneManager.showStartMenu());
 
+        v.getChildren().addAll(result, stats, menuBtn);
         getChildren().addAll(bg, v);
     }
 }

@@ -7,14 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class StartMenu {
 
-    private final Stage stage;
-
-    public StartMenu(Stage stage) {
-        this.stage = stage;
+    public StartMenu() {
+        // No parameters needed anymore
     }
 
     public Scene createScene() {
