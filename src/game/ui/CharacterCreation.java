@@ -1,7 +1,6 @@
 package game.ui;
 
 import game.core.Player;
-import game.core.Enemy;
 import game.core.Profession;
 import game.core.Stat;
 import javafx.geometry.Pos;
@@ -17,26 +16,42 @@ import javafx.scene.layout.VBox;
 public class CharacterCreation extends StackPane {
 
     public CharacterCreation(int width, int height) {
-
         // Background
         ImageView bg = UIUtils.loadImageView("char_create_bg.png", width, height, false);
-
         BorderPane layout = new BorderPane();
 
         VBox center = new VBox(12);
         center.setAlignment(Pos.TOP_CENTER);
 
         Label title = new Label("Character Creation");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        // Icons placeholders
-        HBox icons = new HBox(16);
-        icons.setAlignment(Pos.CENTER);
+        // Character display placeholder (changes when profession selected)
+        ImageView charDisplay = UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true);
+
+        // Profession selection buttons
+        HBox profButtons = new HBox(16);
+        profButtons.setAlignment(Pos.CENTER);
 
         Button bWar = new Button("Warrior");
         Button bMag = new Button("Mage");
         Button bRog = new Button("Rogue");
+        profButtons.getChildren().addAll(bWar, bMag, bRog);
 
-        icons.getChildren().addAll(bWar, bMag, bRog);
+        // Update character image when button clicked
+        final Profession[] selected = {Profession.WARRIOR};
+        bWar.setOnAction(e -> {
+            selected[0] = Profession.WARRIOR;
+            charDisplay.setImage(UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true).getImage());
+        });
+        bMag.setOnAction(e -> {
+            selected[0] = Profession.MAGE;
+            charDisplay.setImage(UIUtils.loadImageView("player_mage_battle.png", 150, 150, true).getImage());
+        });
+        bRog.setOnAction(e -> {
+            selected[0] = Profession.ROGUE;
+            charDisplay.setImage(UIUtils.loadImageView("player_rogue_battle.png", 150, 150, true).getImage());
+        });
 
         // Name input
         HBox nameBox = new HBox(8);
@@ -44,13 +59,6 @@ public class CharacterCreation extends StackPane {
         Label nameLabel = new Label("Name:");
         TextField nameField = new TextField("Hero");
         nameBox.getChildren().addAll(nameLabel, nameField);
-
-        // Selected profession
-        final Profession[] selected = {Profession.WARRIOR};
-
-        bWar.setOnAction(e -> selected[0] = Profession.WARRIOR);
-        bMag.setOnAction(e -> selected[0] = Profession.MAGE);
-        bRog.setOnAction(e -> selected[0] = Profession.ROGUE);
 
         // Start button
         Button start = new Button("Start Adventure");
@@ -61,13 +69,10 @@ public class CharacterCreation extends StackPane {
             Stat s = new Stat(5, 5, 5);
             Player player = new Player(chosenName, selected[0], s);
 
-            Stat eStat = new Stat(4, 3, 2);
-            Enemy enemy = new Enemy("Goblin", eStat);
-
-            SceneManager.showBattleScreen(player, enemy);
+            SceneManager.showTrainingScreen(player);
         });
 
-        center.getChildren().addAll(title, icons, nameBox, start);
+        center.getChildren().addAll(title, charDisplay, profButtons, nameBox, start);
         layout.setCenter(center);
 
         getChildren().addAll(bg, layout);
