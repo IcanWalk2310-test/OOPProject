@@ -26,23 +26,21 @@ public class TrainingScreen {
     private final int totalCycles = 7;
 
     private Label playerStatsLabel;
-    private Label enemyStatsLabel;
+    private VBox enemyStatsBox;
     private Button trainStrBtn, trainAgiBtn, trainIntBtn, nextBtn;
 
     public TrainingScreen(Player player) {
         this.player = player;
 
-        // Initialize enemies
         enemies = new ArrayList<>();
-        enemies.add(new Enemy("Goblin", new Stat(20, 20, 30)));
-        enemies.add(new Enemy("Orc", new Stat(25, 25, 20)));
-        enemies.add(new Enemy("Skeleton", new Stat(15, 30, 20)));
+        enemies.add(new Enemy("Minotaur", new Stat(20, 20, 30)));
+        enemies.add(new Enemy("Killer Rabbit", new Stat(25, 25, 20)));
+        enemies.add(new Enemy("Mindflayer", new Stat(15, 30, 20)));
     }
 
     public Scene createScene() {
         StackPane root = new StackPane();
 
-        // Background
         ImageView bg = UIUtils.loadImageView("battle_bg.png", 800, 600, false);
 
         VBox mainLayout = new VBox(20);
@@ -50,67 +48,59 @@ public class TrainingScreen {
         mainLayout.setPadding(new Insets(20));
 
         // Title
-        Label title = new Label("🏋️‍♂️ Training Phase");
-        title.setFont(Font.font("Verdana", FontWeight.BOLD, 32));
-        title.setTextFill(Color.LIGHTYELLOW);
-        title.setEffect(new DropShadow(3, Color.BLACK));
+        Label title = new Label("🏋️ Training Phase");
+        title.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
+        title.setTextFill(Color.GOLD);
+        title.setEffect(new DropShadow(4, Color.BLACK));
 
-        // Player & Enemy images
+        // Player image
         ImageView playerImg = UIUtils.loadImageView(
                 "player_" + player.getProfession().name().toLowerCase() + "_battle.png",
-                150, 150, true
+                160, 160, true
         );
 
-        HBox enemyImagesBox = new HBox(20);
+        // Enemy images
+        HBox enemyImagesBox = new HBox(25);
         enemyImagesBox.setAlignment(Pos.CENTER);
+
         for (Enemy e : enemies) {
             ImageView img = UIUtils.loadImageView(
-                    "enemy_" + e.getName().toLowerCase() + ".png",
-                    120, 120, true
+                    "enemy_" + e.getName().toLowerCase() + ".png", // keep spaces for Killer Rabbit
+                    130, 130, true
             );
-            enemyImagesBox.getChildren().add(img);
+
+            VBox container = new VBox(8, img, createStyledLabel(e.getName(), 16, Color.WHITE));
+            container.setAlignment(Pos.CENTER);
+            enemyImagesBox.getChildren().add(container);
         }
 
-        HBox imagesBox = new HBox(50, playerImg, enemyImagesBox);
+        HBox imagesBox = new HBox(60, playerImg, enemyImagesBox);
         imagesBox.setAlignment(Pos.CENTER);
 
-        // Stats labels
-        playerStatsLabel = new Label();
-        playerStatsLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
-        playerStatsLabel.setTextFill(Color.LIGHTGREEN);
-        playerStatsLabel.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0,0.5), new CornerRadii(5), Insets.EMPTY)));
-        playerStatsLabel.setPadding(new Insets(8));
-
-        enemyStatsLabel = new Label();
-        enemyStatsLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
-        enemyStatsLabel.setTextFill(Color.LIGHTCORAL);
-        enemyStatsLabel.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0,0.5), new CornerRadii(5), Insets.EMPTY)));
-        enemyStatsLabel.setPadding(new Insets(8));
+        // Stats Displays
+        playerStatsLabel = createStatsLabel(Color.LIGHTGREEN);
+        enemyStatsBox = new VBox(8);
+        enemyStatsBox.setPadding(new Insets(12));
+        enemyStatsBox.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0,0.55), new CornerRadii(6), Insets.EMPTY)));
 
         updateStatsDisplay();
 
-        // Training buttons
-        trainStrBtn = new Button("Train Strength (STR)");
-        trainAgiBtn = new Button("Train Agility (AGI)");
-        trainIntBtn = new Button("Train Intelligence (INT)");
-
-        for (Button btn : new Button[]{trainStrBtn, trainAgiBtn, trainIntBtn}) {
-            btn.setStyle("-fx-font-weight: bold; -fx-background-color: #333; -fx-text-fill: white;");
-            btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold;"));
-            btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: #333; -fx-text-fill: white; -fx-font-weight: bold;"));
-        }
+        // Training Buttons
+        trainStrBtn = createTrainingButton("Train STR");
+        trainAgiBtn = createTrainingButton("Train AGI");
+        trainIntBtn = createTrainingButton("Train INT");
 
         trainStrBtn.setOnAction(e -> trainStat("STR"));
         trainAgiBtn.setOnAction(e -> trainStat("AGI"));
         trainIntBtn.setOnAction(e -> trainStat("INT"));
 
-        HBox trainButtons = new HBox(12, trainStrBtn, trainAgiBtn, trainIntBtn);
+        HBox trainButtons = new HBox(15, trainStrBtn, trainAgiBtn, trainIntBtn);
         trainButtons.setAlignment(Pos.CENTER);
 
         // Next cycle button
         nextBtn = new Button("Next Cycle");
         nextBtn.setDisable(true);
-        nextBtn.setStyle("-fx-font-weight: bold; -fx-background-color: gold; -fx-text-fill: black;");
+        nextBtn.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: gold; -fx-text-fill: black;");
         nextBtn.setOnAction(e -> {
             currentCycle++;
             if (currentCycle < totalCycles) {
@@ -119,33 +109,53 @@ public class TrainingScreen {
                 trainIntBtn.setDisable(false);
                 nextBtn.setDisable(true);
             } else {
-                // Go to first enemy battle
                 SceneManager.showBattleScreen(player, enemies.get(0));
             }
         });
 
-        mainLayout.getChildren().addAll(title, imagesBox, playerStatsLabel, enemyStatsLabel, trainButtons, nextBtn);
-        root.getChildren().addAll(bg, mainLayout);
+        mainLayout.getChildren().addAll(
+                title,
+                imagesBox,
+                playerStatsLabel,
+                enemyStatsBox,
+                trainButtons,
+                nextBtn
+        );
 
+        root.getChildren().addAll(bg, mainLayout);
         return new Scene(root, 800, 600);
     }
 
-    // Train player stat and enemies random stats
+    private Button createTrainingButton(String name) {
+        Button b = new Button(name);
+        b.setStyle("-fx-font-size: 14px; -fx-background-color: #2d2d2d; -fx-text-fill: white; -fx-font-weight: bold;");
+        b.setOnMouseEntered(e -> b.setStyle("-fx-font-size: 14px; -fx-background-color: #555; -fx-text-fill: white; -fx-font-weight: bold;"));
+        b.setOnMouseExited(e -> b.setStyle("-fx-font-size: 14px; -fx-background-color: #2d2d2d; -fx-text-fill: white; -fx-font-weight: bold;"));
+        return b;
+    }
+
+    private Label createStatsLabel(Color color) {
+        Label l = new Label();
+        l.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
+        l.setTextFill(color);
+        l.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0,0.55), new CornerRadii(6), Insets.EMPTY)));
+        l.setPadding(new Insets(10));
+        return l;
+    }
+
+    private Label createStyledLabel(String text, int size, Color c) {
+        Label l = new Label(text);
+        l.setFont(Font.font("Verdana", FontWeight.BOLD, size));
+        l.setTextFill(c);
+        l.setEffect(new DropShadow(3, Color.BLACK));
+        return l;
+    }
+
     private void trainStat(String stat) {
         switch (stat) {
             case "STR" -> player.getStats().increaseStrength(5);
             case "AGI" -> player.getStats().increaseAgility(5);
             case "INT" -> player.getStats().increaseIntelligence(5);
-        }
-
-        // Enemy gains random stat (simulate increaseRandomStat)
-        for (Enemy enemy : enemies) {
-            int rand = (int)(Math.random() * 3);
-            switch (rand) {
-                case 0 -> enemy.getStats().increaseStrength(5);
-                case 1 -> enemy.getStats().increaseAgility(5);
-                case 2 -> enemy.getStats().increaseIntelligence(5);
-            }
         }
 
         updateStatsDisplay();
@@ -158,18 +168,38 @@ public class TrainingScreen {
 
     private void updateStatsDisplay() {
         Stat s = player.getStats();
-        playerStatsLabel.setText(String.format(
-                "PLAYER STATS:\nSTR: %d | AGI: %d | INT: %d\nHP: %d | SPD: %d | ACC: %d | EVA: %d",
-                s.getStrength(), s.getAgility(), s.getIntelligence(),
-                s.getHp(), s.getSpeed(), s.getAccuracy(), s.getEvasion()
-        ));
+        playerStatsLabel.setText(
+                "PLAYER STATS\n" +
+                "STR: " + s.getStrength() +
+                " | AGI: " + s.getAgility() +
+                " | INT: " + s.getIntelligence() + "\n" +
+                "HP: " + s.getHp() +
+                " | SPD: " + s.getSpeed() +
+                " | ACC: " + s.getAccuracy() +
+                " | EVA: " + s.getEvasion()
+        );
 
-        StringBuilder sb = new StringBuilder("ENEMY STATS:\n");
+        enemyStatsBox.getChildren().clear();
+
         for (Enemy e : enemies) {
             Stat es = e.getStats();
-            sb.append(String.format("%s: STR:%d AGI:%d INT:%d HP:%d\n",
-                    e.getName(), es.getStrength(), es.getAgility(), es.getIntelligence(), es.getHp()));
+
+            VBox card = new VBox(4);
+            card.setPadding(new Insets(8));
+            card.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0,0.6), new CornerRadii(5), Insets.EMPTY)));
+
+            Label name = createStyledLabel(e.getName(), 16, Color.LIGHTCORAL);
+            Label stats = new Label(
+                    "STR: " + es.getStrength() +
+                    " | AGI: " + es.getAgility() +
+                    " | INT: " + es.getIntelligence() + "\n" +
+                    "HP: " + es.getHp()
+            );
+            stats.setFont(Font.font("Consolas", FontWeight.BOLD, 14));
+            stats.setTextFill(Color.WHITE);
+
+            card.getChildren().addAll(name, stats);
+            enemyStatsBox.getChildren().add(card);
         }
-        enemyStatsLabel.setText(sb.toString());
     }
 }
