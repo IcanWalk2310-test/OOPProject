@@ -11,18 +11,21 @@ import javafx.stage.Stage;
 
 public class StartMenu {
 
+<<<<<<< Updated upstream
     private final Stage stage;
 
     public StartMenu(Stage stage) {
         this.stage = stage;
+=======
+    public StartMenu() {
+        // No parameters needed
+>>>>>>> Stashed changes
     }
 
     public Scene createScene() {
-
-        // Background
         ImageView bg = UIUtils.loadImageView("start_bg.png", 800, 600, false);
 
-        Button startBtn = new Button("Start Game");
+        Button startBtn = new Button("Start Adventure");
         startBtn.setOnAction(e -> SceneManager.showCharacterCreation());
 
         VBox v = new VBox(20);
@@ -30,7 +33,6 @@ public class StartMenu {
         v.getChildren().addAll(new Text("Turn-Based RPG Demo"), startBtn);
 
         StackPane root = new StackPane(bg, v);
-
         return new Scene(root, 800, 600);
     }
 }

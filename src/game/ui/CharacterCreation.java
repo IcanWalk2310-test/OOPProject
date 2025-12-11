@@ -17,8 +17,11 @@ import javafx.scene.layout.VBox;
 public class CharacterCreation extends StackPane {
 
     public CharacterCreation(int width, int height) {
+<<<<<<< Updated upstream
 
         // Background
+=======
+>>>>>>> Stashed changes
         ImageView bg = UIUtils.loadImageView("char_create_bg.png", width, height, false);
 
         BorderPane layout = new BorderPane();
@@ -28,15 +31,40 @@ public class CharacterCreation extends StackPane {
 
         Label title = new Label("Character Creation");
 
+<<<<<<< Updated upstream
         // Icons placeholders
         HBox icons = new HBox(16);
         icons.setAlignment(Pos.CENTER);
 
+=======
+        // Character display
+        ImageView charDisplay = UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true);
+
+        // Profession buttons
+        HBox profButtons = new HBox(16);
+        profButtons.setAlignment(Pos.CENTER);
+>>>>>>> Stashed changes
         Button bWar = new Button("Warrior");
         Button bMag = new Button("Mage");
         Button bRog = new Button("Rogue");
 
+<<<<<<< Updated upstream
         icons.getChildren().addAll(bWar, bMag, bRog);
+=======
+        final Profession[] selected = {Profession.WARRIOR};
+        bWar.setOnAction(e -> {
+            selected[0] = Profession.WARRIOR;
+            charDisplay.setImage(UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true).getImage());
+        });
+        bMag.setOnAction(e -> {
+            selected[0] = Profession.MAGE;
+            charDisplay.setImage(UIUtils.loadImageView("player_mage_battle.png", 150, 150, true).getImage());
+        });
+        bRog.setOnAction(e -> {
+            selected[0] = Profession.ROGUE;
+            charDisplay.setImage(UIUtils.loadImageView("player_rogue_battle.png", 150, 150, true).getImage());
+        });
+>>>>>>> Stashed changes
 
         // Name input
         HBox nameBox = new HBox(8);
@@ -55,21 +83,22 @@ public class CharacterCreation extends StackPane {
         // Start button
         Button start = new Button("Start Adventure");
         start.setOnAction(e -> {
-            String chosenName = nameField.getText().trim();
-            if (chosenName.isEmpty()) chosenName = "Hero";
+            String name = nameField.getText().trim();
+            if (name.isEmpty()) name = "Hero";
 
-            Stat s = new Stat(5, 5, 5);
-            Player player = new Player(chosenName, selected[0], s);
-
+<<<<<<< Updated upstream
             Stat eStat = new Stat(4, 3, 2);
             Enemy enemy = new Enemy("Goblin", eStat);
 
             SceneManager.showBattleScreen(player, enemy);
+=======
+            Player player = new Player(name, selected[0], new Stat(5,5,5));
+            SceneManager.showTrainingScreen(player);
+>>>>>>> Stashed changes
         });
 
         center.getChildren().addAll(title, icons, nameBox, start);
         layout.setCenter(center);
-
         getChildren().addAll(bg, layout);
     }
 }

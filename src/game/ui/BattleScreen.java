@@ -21,6 +21,7 @@ public class BattleScreen {
     }
 
     public Scene createScene() {
+<<<<<<< Updated upstream
 
         // Background
         ImageView bg = UIUtils.loadImageView("battle_bg.png", 800, 600, false);
@@ -32,14 +33,48 @@ public class BattleScreen {
         HBox images = new HBox(50, playerImg, enemyImg);
         images.setAlignment(Pos.CENTER);
 
+=======
+        ImageView bg = UIUtils.loadImageView("battle_bg.png", 800, 600, false);
+
+        // Player image
+        ImageView playerImg = UIUtils.loadImageView("player_" + player.getProfession().name().toLowerCase() + "_battle.png", 150, 150, true);
+
+        // Enemy image
+        ImageView enemyImg = UIUtils.loadImageView("enemy_" + enemy.getName().toLowerCase() + ".png", 150, 150, true);
+
+        HBox characters = new HBox(50, playerImg, enemyImg);
+        characters.setAlignment(Pos.CENTER);
+
+        // Stats display
+        Label playerStats = new Label("Player: " + player.getName() +
+                " | STR:" + player.getStats().getStrength() +
+                " | AGI:" + player.getStats().getAgility() +
+                " | INT:" + player.getStats().getIntelligence() +
+                " | HP:" + player.getStats().getHp());
+
+        Label enemyStats = new Label("Enemy: " + enemy.getName() +
+                " | STR:" + enemy.getStats().getStrength() +
+                " | AGI:" + enemy.getStats().getAgility() +
+                " | INT:" + enemy.getStats().getIntelligence() +
+                " | HP:" + enemy.getStats().getHp());
+
+        VBox statsBox = new VBox(10, playerStats, enemyStats);
+        statsBox.setAlignment(Pos.CENTER);
+
+        // Back to menu
+>>>>>>> Stashed changes
         Button backBtn = new Button("Back to Menu");
         backBtn.setOnAction(e -> SceneManager.showStartMenu());
 
         VBox v = new VBox(30, images, backBtn);
         v.setAlignment(Pos.CENTER);
 
+<<<<<<< Updated upstream
         StackPane root = new StackPane(bg, v);
 
+=======
+        StackPane root = new StackPane(bg, layout);
+>>>>>>> Stashed changes
         return new Scene(root, 800, 600);
     }
 }
