@@ -22,6 +22,7 @@ public class BattleScreen {
 
     public Scene createScene() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
         // Background
         ImageView bg = UIUtils.loadImageView("battle_bg.png", 800, 600, false);
@@ -39,6 +40,13 @@ public class BattleScreen {
         // Player image
         ImageView playerImg = UIUtils.loadImageView("player_" + player.getProfession().name().toLowerCase() + "_battle.png", 150, 150, true);
 
+=======
+        ImageView bg = UIUtils.loadImageView("battle_bg.png", 800, 600, false);
+
+        // Player image
+        ImageView playerImg = UIUtils.loadImageView("player_" + player.getProfession().name().toLowerCase() + "_battle.png", 150, 150, true);
+
+>>>>>>> Stashed changes
         // Enemy image
         ImageView enemyImg = UIUtils.loadImageView("enemy_" + enemy.getName().toLowerCase() + ".png", 150, 150, true);
 
@@ -62,6 +70,9 @@ public class BattleScreen {
         statsBox.setAlignment(Pos.CENTER);
 
         // Back to menu
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         Button backBtn = new Button("Back to Menu");
         backBtn.setOnAction(e -> SceneManager.showStartMenu());
@@ -74,6 +85,9 @@ public class BattleScreen {
 
 =======
         StackPane root = new StackPane(bg, layout);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         return new Scene(root, 800, 600);
     }

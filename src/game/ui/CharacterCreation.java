@@ -18,8 +18,11 @@ public class CharacterCreation extends StackPane {
 
     public CharacterCreation(int width, int height) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
         // Background
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         ImageView bg = UIUtils.loadImageView("char_create_bg.png", width, height, false);
@@ -32,25 +35,34 @@ public class CharacterCreation extends StackPane {
         Label title = new Label("Character Creation");
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // Icons placeholders
         HBox icons = new HBox(16);
         icons.setAlignment(Pos.CENTER);
 
 =======
+=======
+>>>>>>> Stashed changes
         // Character display
         ImageView charDisplay = UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true);
 
         // Profession buttons
         HBox profButtons = new HBox(16);
         profButtons.setAlignment(Pos.CENTER);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         Button bWar = new Button("Warrior");
         Button bMag = new Button("Mage");
         Button bRog = new Button("Rogue");
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         icons.getChildren().addAll(bWar, bMag, bRog);
 =======
+=======
+>>>>>>> Stashed changes
         final Profession[] selected = {Profession.WARRIOR};
         bWar.setOnAction(e -> {
             selected[0] = Profession.WARRIOR;
@@ -85,6 +97,7 @@ public class CharacterCreation extends StackPane {
         start.setOnAction(e -> {
             String name = nameField.getText().trim();
             if (name.isEmpty()) name = "Hero";
+<<<<<<< Updated upstream
 
 <<<<<<< Updated upstream
             Stat eStat = new Stat(4, 3, 2);
@@ -92,6 +105,9 @@ public class CharacterCreation extends StackPane {
 
             SceneManager.showBattleScreen(player, enemy);
 =======
+=======
+
+>>>>>>> Stashed changes
             Player player = new Player(name, selected[0], new Stat(5,5,5));
             SceneManager.showTrainingScreen(player);
 >>>>>>> Stashed changes

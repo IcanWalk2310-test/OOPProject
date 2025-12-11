@@ -20,7 +20,11 @@ public class SceneManager {
     // START MENU
     public static void showStartMenu() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         StartMenu menu = new StartMenu(stage);
+=======
+        StartMenu menu = new StartMenu();
+>>>>>>> Stashed changes
 =======
         StartMenu menu = new StartMenu();
 >>>>>>> Stashed changes
@@ -36,7 +40,10 @@ public class SceneManager {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
     // TRAINING SCREEN
     public static void showTrainingScreen(Player player) {
         TrainingScreen ts = new TrainingScreen(player);
@@ -45,6 +52,9 @@ public class SceneManager {
     }
 
     // BATTLE SCREEN
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public static void showBattleScreen(Player player, Enemy enemy) {
         BattleScreen bs = new BattleScreen(player, enemy);
@@ -53,9 +63,15 @@ public class SceneManager {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public static void showEndScreen(boolean playerWon) {
         // temporary placeholder text screen
         EndScreen es = new EndScreen(width, height, playerWon);
+=======
+    // END SCREEN
+    public static void showEndScreen(boolean playerWon, Player player) {
+        EndScreen es = new EndScreen(width, height, playerWon, player);
+>>>>>>> Stashed changes
 =======
     // END SCREEN
     public static void showEndScreen(boolean playerWon, Player player) {

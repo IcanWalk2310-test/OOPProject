@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 public class EndScreen extends StackPane {
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private final int width;
     private final int height;
     private final boolean playerWon;
@@ -27,6 +28,13 @@ public class EndScreen extends StackPane {
 =======
     public EndScreen(int width, int height, boolean playerWon, Player player) {
         setPrefSize(width, height);
+=======
+    public EndScreen(int width, int height, boolean playerWon, Player player) {
+        setPrefSize(width, height);
+
+        StackPane bg = new StackPane();
+        bg.setStyle("-fx-background-color: black;");
+>>>>>>> Stashed changes
 
 >>>>>>> Stashed changes
         StackPane bg = new StackPane();
@@ -36,6 +44,7 @@ public class EndScreen extends StackPane {
         v.setAlignment(Pos.CENTER);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         Text txt = new Text(playerWon ? "You Win!" : "You Lose");
         txt.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: white;");
 
@@ -44,6 +53,8 @@ public class EndScreen extends StackPane {
 
         v.getChildren().addAll(txt, menu);
 =======
+=======
+>>>>>>> Stashed changes
         Text result = new Text(playerWon ? "🎉 VICTORY!" : "💀 DEFEAT");
         result.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: yellow;");
 

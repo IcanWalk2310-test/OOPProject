@@ -19,6 +19,9 @@ public class StartMenu {
 =======
     public StartMenu() {
         // No parameters needed
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
