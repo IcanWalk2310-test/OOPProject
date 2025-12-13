@@ -19,7 +19,7 @@ public class StartMenu {
         ImageView bg = UIUtils.loadImageView("start_bg.jpg", 800, 600, false);
 
         // Title
-        Text title = new Text("⚔️ Turn-Based RPG Demo ⚔️");
+        Text title = new Text("⚔️ The Threefold Trial ⚔️");
         title.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
         title.setStyle("-fx-fill: linear-gradient(to right, #FFD700, #FF4500); -fx-effect: dropshadow(gaussian, black, 5, 0.5, 2, 2);");
 

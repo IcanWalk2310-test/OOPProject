@@ -5,6 +5,8 @@ import game.core.Enemy;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.function.Consumer;
+
 public class SceneManager {
 
     private static Stage stage;
@@ -40,7 +42,14 @@ public class SceneManager {
 
     // BATTLE SCREEN
     public static void showBattleScreen(Player player, Enemy enemy) {
-        BattleScreen bs = new BattleScreen(player, enemy);
+        BattleScreen bs = new BattleScreen(player, enemy, null);
+        stage.setScene(bs.createScene());
+        stage.show();
+    }
+
+    // BATTLE SCREEN with callback
+    public static void showBattleScreen(Player player, Enemy enemy, Consumer<Boolean> afterBattle) {
+        BattleScreen bs = new BattleScreen(player, enemy, afterBattle);
         stage.setScene(bs.createScene());
         stage.show();
     }
