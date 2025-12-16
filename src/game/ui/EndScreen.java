@@ -3,55 +3,55 @@ package game.ui;
 import game.core.Player;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 public class EndScreen extends StackPane {
 
-    private final int width;
-    private final int height;
-    private final boolean playerWon;
-    private final Player player;
-
     public EndScreen(int width, int height, boolean playerWon, Player player) {
-        this.width = width;
-        this.height = height;
-        this.playerWon = playerWon;
-        this.player = player;
-        build();
-    }
-
-    private void build() {
         setPrefSize(width, height);
 
-        // Background
-        StackPane bg = new StackPane();
-        bg.setStyle("-fx-background-color: black;");
+        // Background image
+        ImageView bg = UIUtils.loadImageView("end_bg.jpg", width, height, false);
 
-        VBox v = new VBox(20);
-        v.setAlignment(Pos.CENTER);
-
-        // Victory/Defeat text
-        Text result = new Text(playerWon ? "🎉 VICTORY!" : "💀 DEFEAT");
-        result.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-fill: yellow;");
+        // Result text
+        Text result = new Text(playerWon ? "🎉 Victory!" : "💀 Defeat!");
+        result.setFont(Font.font("Consolas", FontWeight.BOLD, 36));
+        result.setFill(Color.GOLD);
+        result.setEffect(new DropShadow(5, Color.BLACK));
 
         // Player stats summary
         Text stats = new Text(
-                "Your Stats:\n" +
-                "  STR: " + player.getStat().getSTR() +
-                " | AGI: " + player.getStat().getAGI() +
-                " | INT: " + player.getStat().getINT() +
-                "\n  HP: " + player.getStat().getHP() +
-                "/" + player.getMaxHP()
+                "Player Stats:\n" +
+                "STR: " + player.getStats().getStrength() +
+                " | AGI: " + player.getStats().getAgility() +
+                " | INT: " + player.getStats().getIntelligence() +
+                " | HP: " + player.getStats().getHp()
         );
-        stats.setStyle("-fx-font-size: 18px; -fx-fill: white;");
+        stats.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
+        stats.setFill(Color.LIGHTGRAY);
 
-        // Back to menu
+        // Back to menu button
         Button menuBtn = new Button("Back to Menu");
+        menuBtn.setStyle(
+                "-fx-font-size: 16px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-color: linear-gradient(to bottom, #FFA500, #FF4500); " +
+                "-fx-text-fill: black; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 8 20;"
+        );
         menuBtn.setOnAction(e -> SceneManager.showStartMenu());
 
-        v.getChildren().addAll(result, stats, menuBtn);
-        getChildren().addAll(bg, v);
+        VBox vbox = new VBox(20, result, stats, menuBtn);
+        vbox.setAlignment(Pos.CENTER);
+
+        getChildren().addAll(bg, vbox);
     }
 }

@@ -8,37 +8,41 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import java.util.List;
+import game.core.Enemy;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 public class CharacterCreation extends StackPane {
 
     public CharacterCreation(int width, int height) {
         // Background
-        ImageView bg = UIUtils.loadImageView("char_create_bg.png", width, height, false);
-        BorderPane layout = new BorderPane();
+        ImageView bg = UIUtils.loadImageView("char_create_bg.jpg", width, height, false);
 
-        VBox center = new VBox(12);
+        VBox center = new VBox(20);
         center.setAlignment(Pos.TOP_CENTER);
 
-        Label title = new Label("Character Creation");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
+        // Title
+        Text title = new Text("🛡️ Character Creation 🛡️");
+        title.setFont(Font.font("Consolas", FontWeight.BOLD, 32));
+        title.setFill(Color.web("#FFD700")); // gold-ish
+        title.setEffect(new DropShadow(5, Color.BLACK));
 
-        // Character display placeholder (changes when profession selected)
+        // Character display
         ImageView charDisplay = UIUtils.loadImageView("player_warrior_battle.png", 150, 150, true);
 
-        // Profession selection buttons
-        HBox profButtons = new HBox(16);
+        // Profession buttons
+        HBox profButtons = new HBox(20);
         profButtons.setAlignment(Pos.CENTER);
-
-        Button bWar = new Button("Warrior");
-        Button bMag = new Button("Mage");
-        Button bRog = new Button("Rogue");
+        Button bWar = createButton("Warrior");
+        Button bMag = createButton("Mage");
+        Button bRog = createButton("Rogue");
         profButtons.getChildren().addAll(bWar, bMag, bRog);
 
-        // Update character image when button clicked
         final Profession[] selected = {Profession.WARRIOR};
         bWar.setOnAction(e -> {
             selected[0] = Profession.WARRIOR;
@@ -54,27 +58,63 @@ public class CharacterCreation extends StackPane {
         });
 
         // Name input
-        HBox nameBox = new HBox(8);
+        HBox nameBox = new HBox(10);
         nameBox.setAlignment(Pos.CENTER);
         Label nameLabel = new Label("Name:");
+        nameLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
+        nameLabel.setTextFill(Color.LIGHTGRAY);
         TextField nameField = new TextField("Hero");
         nameBox.getChildren().addAll(nameLabel, nameField);
 
         // Start button
-        Button start = new Button("Start Adventure");
-        start.setOnAction(e -> {
-            String chosenName = nameField.getText().trim();
-            if (chosenName.isEmpty()) chosenName = "Hero";
+        Button startBtn = createButton("Start Adventure");
+        startBtn.setOnAction(e -> {
+            String name = nameField.getText().trim();
+            if (name.isEmpty()) name = "Hero";
+            Player player = new Player(name, selected[0], new Stat(5, 5, 5));
 
-            Stat s = new Stat(5, 5, 5);
-            Player player = new Player(chosenName, selected[0], s);
+            // Initialize enemies for the training session
+            List<Enemy> enemies = List.of(
+                new Enemy("Minotaur", new Stat(20, 20, 30)),
+                new Enemy("Killer Rabbit", new Stat(25, 25, 20)),
+                new Enemy("Mindflayer", new Stat(15, 30, 20))
+            );
+            GameSession.init(enemies);
 
+            // Show training screen
             SceneManager.showTrainingScreen(player);
         });
 
-        center.getChildren().addAll(title, charDisplay, profButtons, nameBox, start);
-        layout.setCenter(center);
+        center.getChildren().addAll(title, charDisplay, profButtons, nameBox, startBtn);
+        getChildren().addAll(bg, center);
+    }
 
-        getChildren().addAll(bg, layout);
+    private Button createButton(String text) {
+        Button btn = new Button(text);
+        btn.setStyle(
+                "-fx-background-color: #3b2f2f; " + // dark panel
+                "-fx-text-fill: #d4af37; " +         // gold text
+                "-fx-font-size: 16px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 8 20;"
+        );
+        btn.setOnMouseEntered(e -> btn.setStyle(
+                "-fx-background-color: #5a4a4a; " + // slightly lighter on hover
+                "-fx-text-fill: #ffd700; " +
+                "-fx-font-size: 16px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 8 20;"
+        ));
+        btn.setOnMouseExited(e -> btn.setStyle(
+                "-fx-background-color: #3b2f2f; " +
+                "-fx-text-fill: #d4af37; " +
+                "-fx-font-size: 16px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 8 20;"
+        ));
+        return btn;
     }
 }
